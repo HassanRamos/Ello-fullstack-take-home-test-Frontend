@@ -48,7 +48,7 @@ src/utils: Includes utility functions or helper files.
 src/assets: Includes any additional assets required for the project.
 
 Tasks
- The following tasks have been done:
+The following tasks have been done:
 
 Task 1: Implement a book listing page.
 Task 2: Implement lazy loading for books on page scroll.
