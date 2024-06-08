@@ -15,6 +15,9 @@ const Filter = ({ readingLevels, selectedLevel, setSelectedLevel }) => {
       marginBottom={2}
       sx={{
         flexWrap: 'wrap',
+        '& .MuiChip-root': {
+          marginBottom: 1, 
+        },
       }}
     >
       <Typography variant="subtitle1" marginRight={2} fontWeight="bolder">
@@ -28,8 +31,6 @@ const Filter = ({ readingLevels, selectedLevel, setSelectedLevel }) => {
           color={selectedLevel === level ? 'primary' : 'default'}
           onClick={() => handleLevelClick(level)}
           sx={{
-            marginBottom: 1,
-            mx: 0.5,
             border: '1px solid',
             borderColor: selectedLevel === level ? 'primary.main' : 'secondary.main',
             backgroundColor: selectedLevel === level ? 'primary.main' : 'white',

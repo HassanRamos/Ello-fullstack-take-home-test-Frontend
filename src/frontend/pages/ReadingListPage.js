@@ -21,7 +21,7 @@ const ReadingListPage = ({ readingList, removeBookFromList }) => {
         <Grid container spacing={3}>
           {readingList.map((book) => (
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={book.title}>
-              <BookCard book={book} actionLabel="Reading List" icon={<RemoveIcon />} actionHandler={removeBookFromList} />
+              <BookCard book={book} actionLabel="Reading List" icon={<RemoveIcon />} actionHandler={() => removeBookFromList(book)} />
             </Grid>
           ))}
         </Grid>

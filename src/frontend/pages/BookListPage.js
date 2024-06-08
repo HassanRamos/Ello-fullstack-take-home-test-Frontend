@@ -9,6 +9,7 @@ import { groupByReadingLevel } from '../utils/groupByReadingLevel';
 const BookListPage = ({ books, searchTerm, setSearchTerm, selectedLevel, setSelectedLevel, addBookToList }) => {
   const [visibleBooks, setVisibleBooks] = useState(12); // Initial number of visible books
 
+  //Filter books on book list page based on  user input in search bar
   const filteredBooks = books.filter(
     (book) =>
       (searchTerm === '' ||
@@ -16,9 +17,12 @@ const BookListPage = ({ books, searchTerm, setSearchTerm, selectedLevel, setSele
       (selectedLevel === 'All' || book.readingLevel === selectedLevel)
   );
 
+  /// Group books based on Reading Level
   const groupedBooks = groupByReadingLevel(books);
   const readingLevels = ['All', ...Object.keys(groupedBooks).sort()];
 
+
+  //Fuction to handle loading more books as user scroll
   const handleScroll = () => {
     const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight;
     const body = document.body;
@@ -36,6 +40,7 @@ const BookListPage = ({ books, searchTerm, setSearchTerm, selectedLevel, setSele
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
 
   return (
     <Container sx={{ padding: '20px', marginBottom: '50px' }}>

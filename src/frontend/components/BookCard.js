@@ -59,6 +59,7 @@ const BookCard = ({ book, actionLabel, actionHandler, icon }) => {
         </CardActions>
       </Card>
 
+        {/*** Modal to display book ifomations  */}
       <Modal open={open} onClose={handleClose}>
         <Box sx={{ maxWidth: 500, margin: 'auto', mt: 10, p: 2, bgcolor: 'background.paper', boxShadow: 24, borderRadius: 2 }}>
           <CardMedia

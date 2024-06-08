@@ -6,9 +6,8 @@ import { useQuery, gql } from '@apollo/client';
 import theme from './frontend/theme';
 import BookListPage from './frontend/pages/BookListPage';
 import ReadingListPage from './frontend/pages/ReadingListPage';
-import logo from './logoEllo.png'; 
-import CircularProgressWithLabel from './frontend/utils/CircularProgressWithLabel'
-
+import logo from './logoEllo.png';
+import CircularProgressWithLabel from './frontend/utils/CircularProgressWithLabel';
 
 const BOOKS_QUERY = gql`
   query Books {
@@ -30,28 +29,6 @@ const App = () => {
   const [alertSeverity, setAlertSeverity] = useState('success');
   const { loading, error, data } = useQuery(BOOKS_QUERY);
 
-  // Display CircularProgressWithLabel during loading state
-  if (loading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgressWithLabel value={50} thickness={10} />
-      </div>
-    );
-  }
-
-  // Handle error state
-  if (error) {
-    return (
-      <p>
-        Error :(
-        {error.message}
-      </p>
-    );
-  }
-  const books = data.books; //Books data
-
-
-//Function to add books in Reading list
   const addBookToList = (book) => {
     setReadingList((prevList) => {
       if (!prevList.some((b) => b.title === book.title)) {
@@ -68,7 +45,6 @@ const App = () => {
     });
   };
 
-  //Function to remove books from Reading list
   const removeBookFromList = (bookToRemove) => {
     setReadingList((prevList) => {
       setAlertMessage(`Removed "${bookToRemove.title}" from the reading list.`);
@@ -85,29 +61,51 @@ const App = () => {
     setAlertOpen(false);
   };
 
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgressWithLabel value={50} thickness={10} />
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <p>
+        Error :(
+        {error.message}
+      </p>
+    );
+  }
+
+  const books = data.books;
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <Container sx={{ padding: '20px', marginBottom: '50px' }}>
-          <Box display="flex" justifyContent="space-between" alignItems="center" my={2}>
-            <Box display="flex" alignItems="center">
-              <Button component={Link} to="/" >
-                <img src={logo} alt="Logo"  style={{ height: '40px', marginRight: '20px' }} />
-              </Button>
+        <Box position="sticky" top={0} style={{ backgroundColor: 'white' }} zIndex={1}>
+          <Container sx={{ padding: '20px', marginBottom: '10px', textAlign: 'center' }}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" my={2}>
+              <Box display="flex" alignItems="center">
+                <Button component={Link} to="/">
+                  <img src={logo} alt="Logo" style={{ height: '40px', marginRight: '20px' }} />
+                </Button>
+              </Box>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Button component={Link} to="/" variant="text" color="secondary">
+                  Book List
+                </Button>
+                <Button component={Link} to="/reading-list" variant="text" color="secondary">
+                  Reading List ({readingList.length})
+                </Button>
+              </Box>
             </Box>
-            <Box display="flex" justifyContent="space-between" alignItems="center">
-              <Button component={Link} to="/" variant="text" color="secondary">
-                Book List
-              </Button>
-              <Button component={Link} to="/reading-list" variant="text" color="secondary">
-                Reading List ({readingList.length})
-              </Button>
-            </Box>
-          </Box>
+          </Container>
+        </Box>
+        <Container style={{ marginTop: '24px', position: 'relative', zIndex: 0 }}>
           <Routes>
-            <Route 
-              path="/" 
+            <Route
+              path="/"
               element={<BookListPage
                 books={books}
                 searchTerm={searchTerm}
@@ -115,21 +113,21 @@ const App = () => {
                 selectedLevel={selectedLevel}
                 setSelectedLevel={setSelectedLevel}
                 addBookToList={addBookToList}
-              />} 
+              />}
             />
-            <Route 
-              path="/reading-list" 
-              element={<ReadingListPage 
-                readingList={readingList} 
-                removeBookFromList={removeBookFromList} 
-              />} 
+            <Route
+              path="/reading-list"
+              element={<ReadingListPage
+                readingList={readingList}
+                removeBookFromList={removeBookFromList}
+              />}
             />
           </Routes>
           <Snackbar
-            open={alertOpen} 
-            autoHideDuration={3000} 
+            open={alertOpen}
+            autoHideDuration={3000}
             onClose={handleCloseAlert}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }} 
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           >
             <Alert onClose={handleCloseAlert} severity={alertSeverity} sx={{ width: '70%' }}>
               {alertMessage}
