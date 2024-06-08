@@ -6,7 +6,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 const ReadingListPage = ({ readingList, removeBookFromList }) => {
   return (
     <Container>
-      <Typography variant="h5" align="center" gutterBottom>
+      <Typography variant="h5" align="center" gutterBottom marginBottom={7}>
         Reading List
       </Typography>
       {readingList.length === 0 ? (
