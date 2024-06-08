@@ -1,13 +1,18 @@
 import React from 'react';
 import { TextField, Box, useTheme } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
-import image from '../assets/image10.webp';
 
 const SearchBar = ({ setSearchTerm, books }) => {
   const theme = useTheme();
 
-  const handleChange = (event, value) => {
-    setSearchTerm(value);
+  const handleChange = (event, newValue) => {
+    if (typeof newValue === 'string') {
+      setSearchTerm(newValue);
+    } else if (newValue && newValue.title) {
+      setSearchTerm(newValue.title);
+    } else {
+      setSearchTerm('');
+    }
   };
 
   return (
@@ -40,8 +45,16 @@ const SearchBar = ({ setSearchTerm, books }) => {
           />
         )}
         renderOption={(props, option) => (
-          <Box {...props} sx={{ display: 'flex', alignItems: 'center', fontFamily: theme.typography.fontFamily }}>
-            <img src={image} alt={option.title} style={{ width: 50, height: 50, marginRight: 10, borderRadius: 10, padding: 5 }} />
+          <Box
+            {...props}
+            key={`${option.title}-${option.author}`}
+            sx={{ display: 'flex', alignItems: 'center', fontFamily: theme.typography.fontFamily }}
+          >
+            <img
+              src={require(`../${option.coverPhotoURL}`)}
+              alt={option.title}
+              style={{ width: 50, height: 50, marginRight: 10, borderRadius: 10, padding: 5 }}
+            />
             {option.title}
           </Box>
         )}

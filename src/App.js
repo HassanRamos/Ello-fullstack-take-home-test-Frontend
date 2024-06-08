@@ -1,4 +1,3 @@
-// App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import { ThemeProvider, CssBaseline, Container, Box, Button, Snackbar } from '@mui/material';
@@ -7,7 +6,9 @@ import { useQuery, gql } from '@apollo/client';
 import theme from './frontend/theme';
 import BookListPage from './frontend/pages/BookListPage';
 import ReadingListPage from './frontend/pages/ReadingListPage';
-import logo from './logoEllo.png'; // Import the logo image
+import logo from './logoEllo.png'; 
+import CircularProgressWithLabel from './frontend/utils/CircularProgressWithLabel'
+
 
 const BOOKS_QUERY = gql`
   query Books {
@@ -29,11 +30,28 @@ const App = () => {
   const [alertSeverity, setAlertSeverity] = useState('success');
   const { loading, error, data } = useQuery(BOOKS_QUERY);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+  // Display CircularProgressWithLabel during loading state
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgressWithLabel value={50} thickness={10} />
+      </div>
+    );
+  }
 
-  const books = data.books;
+  // Handle error state
+  if (error) {
+    return (
+      <p>
+        Error :(
+        {error.message}
+      </p>
+    );
+  }
+  const books = data.books; //Books data
 
+
+//Function to add books in Reading list
   const addBookToList = (book) => {
     setReadingList((prevList) => {
       if (!prevList.some((b) => b.title === book.title)) {
@@ -50,6 +68,7 @@ const App = () => {
     });
   };
 
+  //Function to remove books from Reading list
   const removeBookFromList = (bookToRemove) => {
     setReadingList((prevList) => {
       setAlertMessage(`Removed "${bookToRemove.title}" from the reading list.`);
@@ -74,7 +93,7 @@ const App = () => {
           <Box display="flex" justifyContent="space-between" alignItems="center" my={2}>
             <Box display="flex" alignItems="center">
               <Button component={Link} to="/" >
-              <img src={logo} alt="Logo"  style={{ height: '40px', marginRight: '20px' }} />
+                <img src={logo} alt="Logo"  style={{ height: '40px', marginRight: '20px' }} />
               </Button>
             </Box>
             <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -112,7 +131,7 @@ const App = () => {
             onClose={handleCloseAlert}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }} 
           >
-            <Alert onClose={handleCloseAlert} severity={alertSeverity} sx={{ width: '50%' }}>
+            <Alert onClose={handleCloseAlert} severity={alertSeverity} sx={{ width: '70%' }}>
               {alertMessage}
             </Alert>
           </Snackbar>

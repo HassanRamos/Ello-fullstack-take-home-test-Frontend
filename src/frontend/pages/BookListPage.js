@@ -11,7 +11,8 @@ const BookListPage = ({ books, searchTerm, setSearchTerm, selectedLevel, setSele
 
   const filteredBooks = books.filter(
     (book) =>
-      (searchTerm === '' || book.title.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (searchTerm === '' ||
+        (typeof searchTerm === 'string' && book.title.toLowerCase().includes(searchTerm.toLowerCase()))) &&
       (selectedLevel === 'All' || book.readingLevel === selectedLevel)
   );
 
@@ -47,13 +48,19 @@ const BookListPage = ({ books, searchTerm, setSearchTerm, selectedLevel, setSele
       <Box my={4}>
         <Filter readingLevels={readingLevels} selectedLevel={selectedLevel} setSelectedLevel={setSelectedLevel} />
       </Box>
-      <Grid container spacing={3}>
-        {filteredBooks.slice(0, visibleBooks).map((book) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={book.title}>
-            <BookCard book={book} actionLabel="Reading List" icon={<AddIcon />} actionHandler={addBookToList} />
-          </Grid>
-        ))}
-      </Grid>
+      {filteredBooks.length === 0 ? (
+        <Typography variant="h6" align="center" gutterBottom>
+          No books found.
+        </Typography>
+      ) : (
+        <Grid container spacing={3}>
+          {filteredBooks.slice(0, visibleBooks).map((book) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={book.title}>
+              <BookCard book={book} actionLabel="Reading List" icon={<AddIcon />} actionHandler={addBookToList} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Container>
   );
 };
